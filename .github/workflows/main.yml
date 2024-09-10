@@ -23,21 +23,21 @@ jobs:
         working-directory: .
         run: docker push ghcr.io/eloiblt/notes:latest
 
-  deploy:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
+  # deploy:
+  #   needs: build-and-push
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: docker login, pull, and up
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.VPS_IP }}
-          username: ${{ secrets.VPS_USERNAME }}
-          password: ${{ secrets.VPS_PWD }}
-          port: ${{ secrets.VPS_PORT }}
-          script: |
-            echo ${{ secrets.GITHUB_TOKEN }} | docker login https://ghcr.io -u eloiblt --password-stdin
-            docker stop notes
-            docker rm notes
-            docker run -d -p 127.0.0.1:2001:80 --pull=always --restart=always --name=notes ghcr.io/eloiblt/notes:latest
+  #     - name: docker login, pull, and up
+  #       uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ secrets.VPS_IP }}
+  #         username: ${{ secrets.VPS_USERNAME }}
+  #         password: ${{ secrets.VPS_PWD }}
+  #         port: ${{ secrets.VPS_PORT }}
+  #         script: |
+  #           echo ${{ secrets.GITHUB_TOKEN }} | docker login https://ghcr.io -u eloiblt --password-stdin
+  #           docker stop notes
+  #           docker rm notes
+  #           docker run -d -p 127.0.0.1:2001:80 --pull=always --restart=always --name=notes ghcr.io/eloiblt/notes:latest
